@@ -1,0 +1,58 @@
+.wrapper{    
+    display: flex;
+    flex-wrap: wrap;
+  
+    width: 100%;
+    
+}
+
+.menu{
+    width: 10%;
+    border: 1px solid black;
+    height: 100vh;
+}
+
+.mainBlock{
+    display: flex;
+    flex-wrap: wrap;
+
+    width: 90%;
+    border: 1px solid black;
+    justify-content: space-between;
+
+}
+    
+
+.mainBlock h1{
+    width: 100%;
+    text-align: center;
+    
+  
+}
+
+.videoBlock{
+    
+    border: 1px solid gray;
+    width: 24%;   
+    margin-bottom: 20px;
+    
+}
+
+.topListCategory{
+
+    width: 100%;
+}
+
+.topListCategory ul{
+
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+
+.topListCategory ul li{
+  
+    margin-right: 15px;
+    list-style-type:none;
+    cursor: pointer;
+}
