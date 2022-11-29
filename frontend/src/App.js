@@ -9,6 +9,7 @@ import Login from './components/login/Login';
 import Video from './components/video/Video';
 import Profile from './components/profile/Profile';
 import Users from './components/users/Users';
+import Exchange from './components/exhange/Exchange';
 import { useSelector, useDispatch } from 'react-redux'
 import React, { useEffect } from 'react';
 
@@ -55,8 +56,8 @@ const App = () => {
 
     <div className='app-wrapper'>    
       
-      <h1>{store.isAuth ? `Пользователь авторизован ${store.isAuth
-      } `: 'АВТОРИЗУЙТЕСЬ'} </h1>
+      <h3>{store.isAuth ? `Пользователь авторизован проверка: ${store.isAuth
+      } `: 'АВТОРИЗУЙТЕСЬ'} </h3>
 
       
 
@@ -73,6 +74,7 @@ const App = () => {
           <Route path='/video' element={<Video/>} ></Route>
           <Route path='/profile' element={<Profile/>} ></Route>     
           <Route path='/users' element={<Users/>} ></Route>    
+          <Route path='/exchange' element={<Exchange/>}> </Route>
           
             
         </Routes>     

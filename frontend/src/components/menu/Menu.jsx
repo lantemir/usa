@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faYoutube} from '@fortawesome/free-brands-svg-icons'
-import {faBars,faUser, faUsers} from '@fortawesome/free-solid-svg-icons'
+import {faBars,faUser, faUsers, faDollar} from '@fortawesome/free-solid-svg-icons'
 // import {faBlogger} from '@fortawesome/free-regular-svg-icons'
 
 import { useNavigate } from 'react-router-dom';
@@ -53,8 +53,14 @@ const exit = () => {
         </div> 
 
         <div className={`${s.singleCol} ${s.socialMediaIconsWhite}`}>            
+            <NavLink to="/exchange"><FontAwesomeIcon icon={faDollar} /> <span className={s.spanList}>Обменик</span> </NavLink>           
+        </div> 
+
+        <div className={`${s.singleCol} ${s.socialMediaIconsWhite}`}>            
           {store.isAuth && <button onClick={exit}>выйти</button>}     
         </div> 
+
+        
         
         
     </div> 

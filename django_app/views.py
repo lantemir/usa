@@ -7,8 +7,19 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User 
 from django_app import serializers
 from django.core.paginator import Paginator
+from django_app import models
 #
+from rest_framework import viewsets
+from rest_framework.views import APIView
+from .serializers import MyPostSerializer
+from rest_framework import permissions #повторно вызвался
+from rest_framework.parsers import MultiPartParser, FormParser #для загрузки картинок
 
+#парсинг
+import requests
+from bs4 import BeautifulSoup
+import io
+#
 
 
 
@@ -20,14 +31,136 @@ def index(request):
 
 
 
-@api_view(http_method_names=["POST", "GET"])
+@api_view(http_method_names=["POST", "GET", "PUT"])
+@permission_classes([AllowAny])
+def parsing_exchange(request): 
+    context={}
+    #url = "https://jusan.kz/exchange-rates"
+    url = "https://www.mig.kz/"
+
+    # verify=False
+
+    headers={
+        "accept": "*/*",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
+
+    }
+
+
+    
+    req = requests.get(url, headers=headers)
+    src= req.text
+    # # print(src)
+
+    # with open ("parse.html", "w", encoding="utf-8") as file:
+    #     file.write(src)
+
+    # with open ("parse.html", encoding="utf-8") as file:
+    #     read = file.read()
+
+        # print(read)
+
+
+    soup = BeautifulSoup(src, "lxml")
+    currency = soup.find_all(class_="currency")
+    buy_delta_positive = soup.find_all(True, {'class':['buy', 'delta-positive']})
+
+    sell_delta_positive = soup.find_all(True, {'class':['sell', 'delta-positive']})
+
+    # for item in currency:
+    #     print(item.text)
+
+    # for item in buy_delta_positive:
+    #     print(item.text)
+   
+    # for item in sell_delta_positive:
+    #     print(item.text)
+    newArr = []
+
+    for i in range(len(sell_delta_positive)):
+        # print(i)
+        newArr.append({"currency": currency[i].text, "buy_delta_positive":buy_delta_positive[i].text, "sell_delta_positive": sell_delta_positive[i].text})
+
+    for item in newArr:
+        print(item)
+
+    return Response( {'data': newArr}, status=status.HTTP_200_OK)
+    # return render(request, 'django_app/main.html', context={newArr})
+
+@api_view(http_method_names=["POST", "GET", "PUT"])
 @permission_classes([IsAuthenticated])
-def profile(request):
+def profile(request): 
+    
+    
+    try:
+        if request.user.pk:
+            if request.method == "GET":
+                
+                # User.objects.filter(username = username).exists()
+                # obj_user = User.objects.filter(pk = request.user.pk)
 
-    if request.method == "GET":
-        
+                obj_user = User.objects.get(pk = request.user.pk)
+             
+                serialized_obj_user = serializers.UserModelSerializer(instance=obj_user, many= False).data
+                
+                
 
-        return Response( {"profile": {"user": "тест"}},  status=status.HTTP_200_OK)
+                return Response( {"profile": {"user": serialized_obj_user}},  status=status.HTTP_200_OK)
+            if request.method == "PUT":
+
+                email_change = request.data.get("emailChange")
+                print(email_change) 
+                
+
+                obj_user = User.objects.get(pk = request.user.pk)
+                print(obj_user.email)
+                print(obj_user)
+                if(obj_user.email != email_change):
+                    print("изменил")
+                    obj_user.email = email_change
+
+                    # User.objects.update_or_create(                        
+                    # )
+                    obj_user.save()
+
+                    return Response( {"profile": {"email": email_change}},  status=status.HTTP_200_OK)
+
+                print("не изменил")
+             
+                return Response( {"profile": {"email": "Без изменений"}},  status=status.HTTP_200_OK)
+
+            if request.method == "POST":
+
+                cover = request.data['cover']
+                print(cover)
+                obj_profile = models.Profile.objects.get(pk=request.user.pk)
+                obj_profile.objects.create(avatar=cover)
+                obj_profile.save()
+          
+
+        else:
+            if request.method == "GET":
+                return Response( {"profile": {"user": "тест"}},  status=status.HTTP_200_OK)
+
+    except Exception as error:
+        print (error)
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# parser_classes = (MultiPartParser, FormParser)
+# @api_view(http_method_names=["POST", "GET", "PUT"])
+# @permission_classes([IsAuthenticated])
+
+# def profile_avater(request, format=None):
+#     print (request.data)
+#     # serializer =  serializers.ProfileModelSerializer(data=request.data)
+#     # if serializer.is_valid():
+#     #     serializer.save()
+#     PostSerializer
+#     return Response( {"profile": {"user": "serializer.data"}},  status=status.HTTP_200_OK)
+#     # else:
+#     #     return Response(status=status.HTTP_400_BAD_REQUEST)
+    
 
 
 @api_view(http_method_names=["POST", "GET", "PUT", "DELETE"])
@@ -36,8 +169,10 @@ def users(request):
     if request.method == "GET":
         print(request)
 
-        currentPage = int(request.GET.get("currentPage", 7))
-        pageSize = int(request.GET.get("pageSize", 4))
+
+
+        currentPage = int(request.GET.get("currentPage" ))
+        pageSize = int(request.GET.get("pageSize"))
 
         print("currentPage")
         print(currentPage)
@@ -51,9 +186,10 @@ def users(request):
         paginator_obj = Paginator(serialized_obj_users, pageSize)
 
         currentPage = paginator_obj.get_page(currentPage).object_list
+        
+        
 
-
-        return Response( {"datausers": {"users": currentPage}},  status=status.HTTP_200_OK)
+        return Response( {"datausers": {"users": currentPage, "countUser": obj_users.count()}},  status=status.HTTP_200_OK)
 
 # login react
 @api_view(http_method_names=["POST", "GET"])
@@ -115,3 +251,71 @@ def registration(request):
         #     return Response(status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+
+# картинка
+
+class MyPostViewSet(APIView):
+    
+    queryset = models.MyPost.objects.all()
+    serializer_class = MyPostSerializer
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    
+    def post(self, request, *args, **kwargs):
+
+
+        usern=request.user
+        
+        
+        print(request.data['title'])
+        print(request.data['description'])
+        print(request.data['image_url'])
+
+        
+        image_url = request.data['image_url']
+        
+        title = request.data['title']
+        description = request.data['description']
+
+        # models.MyPost.objects.create(creator=usern, title=title, description=description, image_url = image_url)
+        
+        # models.MyPost.objects.update_or_create(creator=usern, title=title, description=description, image_url = image_url)
+
+        myobject = models.MyPost.objects.get(creator=usern)
+
+        myobject.image_url = image_url
+        myobject.save()
+
+        # created = models.MyPost.objects.update(creator=usern, image_url = image_url)
+
+
+        # post, created = models.MyPost.objects.get_or_create(creator=usern, title=title, description=description, image_url = image_url)
+
+
+
+        # obj, created = models.MyPost.update_or_create(
+        # creator=usern, title=title, description=description,image_url=image_url,
+        # defaults={'creator': usern, 'title':title, 'description': description, 'image_url': image_url},
+        # )
+
+
+        # if created:
+        #     print("пост добавлен")
+        # else:
+        #     print("пост уже есть")
+        #     print(post["title"])
+        #     print(post.title)     
+
+
+        
+
+     
+        return Response(  status=status.HTTP_200_OK)
+ 
+    # def perform_create(self, serializer):
+    #     serializer.save(creator=self.request.user)
+
+

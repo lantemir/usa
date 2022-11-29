@@ -4,6 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from django_app.views import MyPostViewSet#для класов
 #
 
 urlpatterns = [
@@ -14,8 +15,16 @@ urlpatterns = [
 
     path('registration/', views.registration, name='registration' ),
 
+    re_path(route=r'profile/(?P<profile_id>\d+)/$', view= views.profile),
     path('profile/', views.profile, name='profile'),
 
-    # re_path(route=r'^users/(?P<user_id>\d+)/$', view=views.users, ),
     path('users/', views.users, name='users'),
+
+    # re_path(route=r'^users/(?P<user_id>\d+)/$', view=views.users, ),
+    
+
+    path('profilephoto/', views.MyPostViewSet.as_view()),
+
+    path('parsingexchange/', views.parsing_exchange, name='parsing_exchange'),
+    
 ]

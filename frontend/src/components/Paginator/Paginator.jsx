@@ -4,7 +4,7 @@ import cn from "classnames";  // npm install classnames //  classNames= {cn(styl
                                   // classNames= {cn(styles.paginator, [styles.selectedPages]: true)}
 
 
-let Paginator = ({totalIcereamsCount, pageSize, currentPage, onPageChanged, portionSize = 3}) => {
+let Paginator = ({totalUsersCount, pageSize, currentPage, onPageChanged, portionSize = 3}) => {
 
     console.log("Paginator");
     // console.log(totalIcereamsCount)
@@ -12,7 +12,7 @@ let Paginator = ({totalIcereamsCount, pageSize, currentPage, onPageChanged, port
     console.log(currentPage)
     // console.log(portionSize)
 
-    let pagesCount = Math.ceil(totalIcereamsCount / pageSize); //   12/4 =3
+    let pagesCount = Math.ceil(totalUsersCount / pageSize); //   12/4 =3
 
     let pages = [];
     for (let i = 1; i <= pagesCount; i++){

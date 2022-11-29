@@ -32,7 +32,7 @@ urlpatterns = [
 
     path('api/', include('rest_framework.urls')),
 
-    
+    # path('parsingexchange/', views.parsing_exchange, name='parsing_exchange'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

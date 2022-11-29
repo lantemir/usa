@@ -3,10 +3,11 @@ import UserService from "../services/UserService";
 const SET_USERS = "SET_USERS";
 const SET_CURRENT_PAGE_USER = "SET_CURRENT_PAGE_USER"
 const SET_TOTAL_USER_COUNT = "SET_TOTAL_USER_COUNT"
+const SET_PAGE_SIZE = "SET_PAGE_SIZE"
 
 let initialState={
     users: [],
-    pageSize: 4,
+    pageSize: 3,
     totalUsersCount: 0,
     currentPage: 1,
     isFetching: true,
@@ -28,6 +29,11 @@ const userReducer = (state = initialState, action) => {
                 ...state, totalUsersCount: action.totalUsersCount
             }
         }
+        case SET_PAGE_SIZE: {
+            return{
+                ...state, pageSize: action.pageSize
+            }
+        }
         default:
             return state;
     }
@@ -35,16 +41,19 @@ const userReducer = (state = initialState, action) => {
 
 export const setUsers = (users) => ({type: SET_USERS, users})
 export const setCurrentPageAction = (currentPage) => ({type: SET_CURRENT_PAGE_USER, currentPage})
+export const setPageSizeAction = (pageSize) => ({type: SET_PAGE_SIZE, pageSize})
 export const setTotalUserCount = (totalUsersCount) => ({type: SET_TOTAL_USER_COUNT, totalUsersCount})
 
-export const requestUsers = async (currentPage, pageSize, dispatch)  => {
+export const requestUsers = async (currentPage, dispatch, pageSize)  => {
     // return async (dispatch) => {
         console.log('requestUsers')
 
        const response = await UserService.getUsers(currentPage, pageSize)
-        console.log(response.data.datausers.users)
+        console.log(response.data.datausers)
         
-        // setCurrentPageAction()
+        dispatch(setCurrentPageAction(currentPage))
+        dispatch(setTotalUserCount(response.data.datausers.countUser))
+        dispatch(setPageSizeAction(pageSize))
         dispatch(setUsers(response.data.datausers.users))
     // }
 }

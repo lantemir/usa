@@ -8,6 +8,6 @@ admin.site.index_title = 'Панель 2'
 admin.site.site_title = 'Панель 3'
 
 
-
-
+admin.site.register(models.MyPost)
+admin.site.register(models.StoryCategory)
 admin.site.register(models.Profile)

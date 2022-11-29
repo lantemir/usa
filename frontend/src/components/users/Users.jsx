@@ -9,12 +9,15 @@ import { requestUsers } from '../../redux/user-reducer';
 
 import Menu from '../menu/Menu';
 import { useDispatch, useSelector } from 'react-redux';
+import Paginator from '../Paginator/Paginator'
 
 
 
 const Users = () => {
 
+    
     const dispatch = useDispatch();
+   
 
     const usersStore = useSelector(state => state.userReducerR);
     const{
@@ -28,9 +31,14 @@ const Users = () => {
 
     
     useEffect( () => {
-     requestUsers(1,3,dispatch)
+     requestUsers(1,dispatch, pageSize)
     
     },[])
+
+    const onPageChanged = (currentPage) => {
+        requestUsers(currentPage, dispatch, pageSize)    
+      }
+    
      
 
   
@@ -58,14 +66,30 @@ const Users = () => {
             <div className={s.mainBlock}>
 
 
-                <h1>Users</h1>
-                <button onClick={getUsers}>get users</button>
-                <button onClick={selectorTest}>selector Test</button>
+                <div className={s.testBlock}>
+                   <h3>Пользователи</h3>
+                     <button onClick={getUsers}>get users</button>
+                    <button onClick={selectorTest}>selector Test</button>
+                </div>                
+                    {users.map(item => {
+                        return <div className={s.usersBlock}>
+                                    <div className={s.userImgBlock}>
+                                        <img src={item.avatar[0].avatar ? item.avatar[0].avatar : '/media/avatars/ava.jpg' }></img>
+                                        {/* <img src= '/media/avatars/ava.jpg' ></img> */}
+                                    </div>
 
-                {users.map(item => {
-                    <p>{item.username}</p>
-                })  }
-            
+                                    <div className={s.userTextBlock}>
+                                         <p>{item.username}</p>
+                                         <p>Марлен привет</p>
+                                    </div>
+                                 </div>
+                    })  }
+                
+                
+            <div className={s.paginator}>
+                
+                <Paginator currentPage={currentPage} totalUsersCount={totalUsersCount} pageSize={pageSize} onPageChanged={onPageChanged}/>
+            </div>
                 
 
 

@@ -1,76 +1,62 @@
 .wrapper{    
     display: flex;
-    flex-wrap: wrap;
-  
-    width: 100%;
+   
     
 }
 
 .menu{
-    width: 10%;
-    
-    height: 100vh;
+
 }
 
 .mainBlock{
-    width: 90%;
+   
+   
+  
     /* border: 1px solid black; */
     background-color: rgb(243, 243, 243);
+
+    
+
+    
 }
 
-.mainBlock h1{
+.mainBlock h3{
     text-align: center;
   
 }
 
 
+.usersBlock{    
+    border: 1px solid rgb(177, 174, 174);
+    width: 30%;   
+  
+  
+    border-radius: 10px;
+    
+}
 
-
-.profileblock{
-
-    display: flex;
-
+.userImgBlock{
    
-    margin: 100px;
-    background-color: white;
-    border-radius: 30px;
-
-}
-
-.profileImage{
-    width: 35%;
-    text-align: center;
-    
-    
-}
-
-.profileImage img{
-    box-sizing: content-box;
-   width: 80%;
-   clip-path: circle(); 
-}
-.profileForm{
-    width: 65%;
-  
-    display: flex;
-    justify-content: center;    
-}
-
-.profileForm form{
+    width: 30%;
     display: flex;
     justify-content: center;
-    flex-direction: column;
-    width: 50%;    
+    align-items: center;
+    
 }
 
-.profileForm form input{
-    margin-bottom: 30px;
-    padding: 10px 10px;
-    border-radius: 10px;
-    border: none;
-    background-color: rgb(225, 225, 225);
-    outline: none;
-  
+.userTextBlock{
+ 
+    
+    text-align: center;
+}
+
+.usersBlock img{    
+   
+    width: 100%;
+    box-sizing: content-box;
+    
+    clip-path: circle(); 
+
 }
 
 
@@ -84,4 +70,12 @@
     font-weight: bold;
     margin-top: 15px;
     margin-bottom: 20px;
+}
+
+
+
+
+.paginator{
+    /* display: flex;
+    width: 100%; */
 }

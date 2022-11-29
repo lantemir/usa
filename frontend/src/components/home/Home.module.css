@@ -1,23 +1,10 @@
 .wrapper{    
-    display: flex;
-    flex-wrap: wrap;
-  
-    width: 100%;
+    display: flex;    
+}
+.menu{     
+ 
+}
+.mainBlock{    
     
 }
 
-.menu{
-    width: 10%;
-    border: 1px solid black;
-    height: 100vh;
-}
-
-.mainBlock{
-    width: 90%;
-    border: 1px solid black;
-}
-
-.mainBlock h1{
-    text-align: center;
-  
-}

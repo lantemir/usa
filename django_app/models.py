@@ -32,6 +32,28 @@ class StoryCategory(models.Model):
 
 
 
+# для картинок
+def upload_to (instance, filename):
+    return 'images/{filename}'.format(filename=filename)
+
+class MyPost(models.Model):
+    creator = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="listings")
+
+    title = models.CharField(
+        max_length=80, blank=False, null=True)
+    description = models.TextField()
+    image_url = models.ImageField(upload_to=upload_to, blank=True, null=True)
+
+    class Meta:
+        app_label = 'django_app' # для отображения в админке и ещё надо изменить и добавить в apps.py
+        # ordering = ('title') # сортировка сначала по title потом по dexcription
+        verbose_name = 'посты'    
+        verbose_name_plural = 'посты'
+
+    def __str__(self) -> str:
+        return f'{self.title}'
+
 
 
 class Profile(models.Model):
@@ -50,7 +72,8 @@ class Profile(models.Model):
     avatar = models.ImageField(
         null=True,       
         blank=True,       
-        upload_to="avatars/"
+        upload_to="avatars/",
+        default='avatars/ava.jpg'
     )
 
     class Meta:
