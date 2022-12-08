@@ -42,17 +42,17 @@ const Users = () => {
      
 
   
-    const getUsers = (e) => {
-        e.preventDefault();
+    // const getUsers = (e) => {
+    //     e.preventDefault();
 
-        console.log('getUsers')
-        requestUsers(1, 3, dispatch)
-    }
+    //     console.log('getUsers')
+    //     requestUsers(1, 3, dispatch)
+    // }
 
 
-    const selectorTest = () => {
-        console.log(usersStore)
-    }
+    // const selectorTest = () => {
+    //     console.log(usersStore)
+    // }
 
     
 
@@ -66,21 +66,21 @@ const Users = () => {
             <div className={s.mainBlock}>
 
 
-                <div className={s.testBlock}>
+                <div >
                    <h3>Пользователи</h3>
-                     <button onClick={getUsers}>get users</button>
-                    <button onClick={selectorTest}>selector Test</button>
+                     {/* <button onClick={getUsers}>get users</button>
+                    <button onClick={selectorTest}>selector Test</button> */}
                 </div>                
-                    {users.map(item => {
+                    {users && users.map(item => {
                         return <div className={s.usersBlock}>
                                     <div className={s.userImgBlock}>
                                         <img src={item.avatar[0].avatar ? item.avatar[0].avatar : '/media/avatars/ava.jpg' }></img>
-                                        {/* <img src= '/media/avatars/ava.jpg' ></img> */}
+                                     
                                     </div>
 
                                     <div className={s.userTextBlock}>
                                          <p>{item.username}</p>
-                                         <p>Марлен привет</p>
+                                       
                                     </div>
                                  </div>
                     })  }

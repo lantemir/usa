@@ -11,17 +11,15 @@ from django_app import models
 #
 from rest_framework import viewsets
 from rest_framework.views import APIView
-from .serializers import MyPostSerializer
+from .serializers import MyPostSerializer, ProfileModelSerializer 
 from rest_framework import permissions #повторно вызвался
 from rest_framework.parsers import MultiPartParser, FormParser #для загрузки картинок
-
 #парсинг
 import requests
 from bs4 import BeautifulSoup
-import io
+# доступ к файлам
+from django.core.files.storage import FileSystemStorage
 #
-
-
 
 def index(request):
     context={}
@@ -78,14 +76,13 @@ def parsing_exchange(request):
     newArr = []
 
     for i in range(len(sell_delta_positive)):
-        # print(i)
+     
         newArr.append({"currency": currency[i].text, "buy_delta_positive":buy_delta_positive[i].text, "sell_delta_positive": sell_delta_positive[i].text})
 
-    for item in newArr:
-        print(item)
+
 
     return Response( {'data': newArr}, status=status.HTTP_200_OK)
-    # return render(request, 'django_app/main.html', context={newArr})
+    
 
 @api_view(http_method_names=["POST", "GET", "PUT"])
 @permission_classes([IsAuthenticated])
@@ -160,7 +157,55 @@ def profile(request):
 #     return Response( {"profile": {"user": "serializer.data"}},  status=status.HTTP_200_OK)
 #     # else:
 #     #     return Response(status=status.HTTP_400_BAD_REQUEST)
-    
+
+@api_view(http_method_names=["POST", "GET", "PUT", "DELETE"])    
+@permission_classes([IsAuthenticated])
+def videos(request):
+    if request.method == "GET":
+        print(request)
+
+        currentPage = int(request.GET.get("currentPage" ))
+        pageSize = int(request.GET.get("pageSize"))
+        categoryid = int(request.GET.get("categoryid"))
+
+
+        print("categoryid")
+        print(categoryid)
+
+        print("currentPage")
+        print(currentPage)
+
+        print("pageSize")
+        print(pageSize)
+
+        if categoryid > 0:
+            print("есть категория")
+            obj_videos = models.youtube_video.objects.filter(category_id = categoryid)
+            serialized_obj_videos = serializers.VideoModelSerializer(instance=obj_videos, many=True).data
+            paginator_obj = Paginator(serialized_obj_videos, pageSize)
+            currentPage = paginator_obj.get_page(currentPage).object_list
+
+        else:
+            print("нет категории")
+
+            obj_videos = models.youtube_video.objects.all()
+            serialized_obj_videos = serializers.VideoModelSerializer(instance=obj_videos, many=True).data
+
+            paginator_obj = Paginator(serialized_obj_videos, pageSize)
+
+            currentPage = paginator_obj.get_page(currentPage).object_list
+
+        obj_category = models.youtube_video_category.objects.all()
+        serialized_obj_videos_category = serializers.VideoCategoryModelSerializer(instance=obj_category, many=True).data
+
+
+
+        return Response( {"videos": currentPage, "conterVideos": obj_videos.count(), "categoryVideos": serialized_obj_videos_category }, status=status.HTTP_200_OK)
+
+
+# @api_view(http_method_names=["POST", "GET", "PUT", "DELETE"])    
+# @permission_classes([IsAuthenticated])
+# def 
 
 
 @api_view(http_method_names=["POST", "GET", "PUT", "DELETE"])
@@ -254,40 +299,79 @@ def registration(request):
 
 
 
+
+
+class MyProfilePhoto(APIView):
+    queryset = models.Profile.objects.all()
+    serializer_class = ProfileModelSerializer
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]   
+
+    def post(self, request, *args, **kwargs):
+        usern=request.user  
+
+        avatar = request.data['avatar']
+        print(avatar)
+
+        my_profile_obj = models.Profile.objects.get(user=usern)
+
+        if my_profile_obj.avatar:
+        
+            fs = FileSystemStorage()
+            fs.delete(my_profile_obj.avatar.path)          
+        
+
+        my_profile_obj.avatar = avatar
+        my_profile_obj.save()
+
+        obj_user = User.objects.get(pk = usern.pk)
+        serialized_obj_user = serializers.UserModelSerializer(instance=obj_user, many= False).data
+
+        return Response( {"profile": {"user": serialized_obj_user}},  status=status.HTTP_200_OK)
+
+
+
+
 # картинка
 
-class MyPostViewSet(APIView):
-    
-    queryset = models.MyPost.objects.all()
+class MyPostViewSet(APIView):    
+    queryset = models.MyPost.objects.all()    
     serializer_class = MyPostSerializer
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]   
     
     def post(self, request, *args, **kwargs):
-
-
-        usern=request.user
-        
+        usern=request.user        
         
         print(request.data['title'])
         print(request.data['description'])
         print(request.data['image_url'])
+        # print(request.data["image"])
+
+        # print(request.post)
+
+        # print(img)
 
         
         image_url = request.data['image_url']
+        # print(avatar)
         
-        title = request.data['title']
-        description = request.data['description']
+        # title = request.data['title']
+        # description = request.data['description']
 
         # models.MyPost.objects.create(creator=usern, title=title, description=description, image_url = image_url)
         
         # models.MyPost.objects.update_or_create(creator=usern, title=title, description=description, image_url = image_url)
 
-        myobject = models.MyPost.objects.get(creator=usern)
+        # myobject = models.MyPost.objects.get(creator=usern)
 
-        myobject.image_url = image_url
-        myobject.save()
+        # myobject.image_url = image_url
+        # myobject.save()
+
+
+        my_profile_obj = models.MyPost.objects.get(creator=usern)
+        my_profile_obj.image_url = image_url
+        my_profile_obj.save()
 
         # created = models.MyPost.objects.update(creator=usern, image_url = image_url)
 
@@ -313,7 +397,7 @@ class MyPostViewSet(APIView):
         
 
      
-        return Response(  status=status.HTTP_200_OK)
+        return Response( {"profile": {"user": "тест"}}, status=status.HTTP_200_OK)
  
     # def perform_create(self, serializer):
     #     serializer.save(creator=self.request.user)

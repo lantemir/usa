@@ -6,34 +6,41 @@
 }
 
 .mainBlock{ 
-
+ width: 100%;
 }
     
 
 .mainBlock h1{
-    width: 100%;
-    text-align: center;
+    
+    
     
   
 }
+.videoBlockMain{
+    margin-top: 2%;
+    /* border: 10px solid red; */
+    display: flex;
+
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
 
 .videoBlock{
+    width: 30%;
     
-    border: 1px solid gray;
-    width: 24%;   
+    
     margin-bottom: 20px;
     
 }
 
 .topListCategory{
 
-    width: 100%;
+    /* border: 10px solid red; */
 }
 
 .topListCategory ul{
 
     display: flex;
-    flex-wrap: wrap;
     
 }
 

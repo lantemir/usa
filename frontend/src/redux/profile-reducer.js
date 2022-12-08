@@ -3,9 +3,11 @@ import ProfileService from "../services/ProfileService";
 
 // const GETPROFILE = "GETPROFILE";
 const SETPROFILE = "SETPROFILE";
+const SETAVAST = "SETAVAST";
 
 let initialState = {
-    profile : {}   
+    profile : {},
+    avast: null   
 };
 
 const profileReducer = (state = initialState, action) => {
@@ -16,12 +18,17 @@ const profileReducer = (state = initialState, action) => {
         case SETPROFILE: {
             return {...state, profile: action.profile};
         }
+        case SETAVAST: {
+            return {...state, avast: action.avast};
+        }
 
         default: return state;
     }
 }
 
 export const setProfile = (profile) => ({type: SETPROFILE, profile}) 
+export const setavast = (avast) => ({type: SETAVAST, avast})
+
  
 export const getProfile = async(dispatch) => {
     try{
@@ -30,6 +37,7 @@ export const getProfile = async(dispatch) => {
         console.log(response.data.profile.user)
         console.log("profileReducer")
         dispatch(setProfile(response.data.profile.user))
+        dispatch(setavast(response.data.profile.user.avatar[0].avatar))
 
     } catch(e) {
         console.log(e)
@@ -49,6 +57,8 @@ export const uploadProfilePhoto = async(uploadData, dispatch) => {
     try{
         const response = await ProfileService.uploadPhotoProfile(uploadData)
         console.log(response);
+        
+        dispatch(setavast(response.data.profile.user.avatar[0].avatar))
     } catch(e) {
         console.log(e)
     }

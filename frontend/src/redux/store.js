@@ -5,13 +5,15 @@ import thunkMiddleware from 'redux-thunk';
 import authReducer from './auth-reducer';
 import profileReducer from './profile-reducer';
 import userReducer from './user-reducer';
+import videoReducer from './video-reducer';
 
 
 
 let reducers = combineReducers({
     authReducerR: authReducer,
     profileReducerR: profileReducer,
-    userReducerR: userReducer   
+    userReducerR: userReducer,
+    videoReducerR: videoReducer   
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; 

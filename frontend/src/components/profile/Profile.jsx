@@ -13,46 +13,74 @@ const Profile = () => {
 
     const [usernameState, setusernameState] = useState('');
     const [emailState, setEmailState] = useState('');
-    const [cover, setCover] = useState('')
+    const [ava, setAvatar] = useState();
+
+    const [avaShow, setAvaShow] = useState('');
     
 
 
     const dispatch = useDispatch();
 
     const profileStore = useSelector(state => state.profileReducerR);
-    const {
-        avatar,
+    const {        
         email,
-        username
+        username,
+        
     } = profileStore.profile
+    // const avatarRedux = profileStore.profile.avatar[0].avatar
 
     
 
     
     useEffect( () => {
     getProfile(dispatch); 
-    console.log(username)   
+    // console.log(profileStore.profile.avatar.map(item => {
+    //     console.log(item)
+    // }))
+    
+  
     
     },[])
 
     useEffect( () => {
         setusernameState(username)     
         setEmailState(email)
-        // setCover(cover)
+        if (profileStore.avast == '' || profileStore.avast == null){
+            console.log('/media/avatars/ava.jpg$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+            setAvaShow('/media/avatars/ava.jpg')
+        }else{
+            setAvaShow(profileStore.avast)
+            console.log("noooooooooooooooooooooooooo")
+        }
         
-    },[username,email])
+    },[username,email,profileStore.avast])
      
 
     const uploadPhoto = (e) => {
         e.preventDefault()
 
-        const uploadData = new FormData();
-        uploadData.append('cover', cover, cover.name);
+       
 
-        uploadProfilePhoto(uploadData, dispatch);
+   
+
+        let formdata = new FormData()
+        formdata.append('avatar', ava, ava.name);
+        formdata.append('name', "avatarnew")
+
+
+        console.log(formdata)
+
+
+
+
+        // const uploadData = new FormData();
+        // uploadData.append('file', imageProf, imageProf.name);
+        // console.log(uploadData)
+
+         uploadProfilePhoto(formdata, dispatch);
         
 
-        console.log("photo")
+        // console.log("photo")
     }
 
     const OnupdateProfile = (e) => {
@@ -68,12 +96,24 @@ const Profile = () => {
     const getUseSelector = (e) => {
         e.preventDefault();
         
-        console.log(usernameState)
+        console.log(profileStore)
+        console.log(profileStore.avast)
+
+        console.log(avaShow)
+    }
+
+    const handleFile = (e) => {
+        // console.log(e.target.files, "$$$$")
+        // console.log(e.target.files[0], "$$$$")
+
+        // let file = e.target.files[0]
+        // setFile({file: file})
     }
 
     return (
+        
         <div className={s.wrapper}>
-
+            {/* {console.log("render") } */}
             <div className={s.menu}>
                 <Menu />
             </div>
@@ -83,12 +123,20 @@ const Profile = () => {
 
                 <div className={s.profileblock}>
                     <div className={s.profileImage}>
-                        {/* <img src={avatar[0].avatar ? avatar[0].avatar : '/media/avatars/ava.jpg' } /> */}
-                        <img src='/media/avatars/ava.jpg'  />
+                      
+                       
+                        {/* <img src={profileStore.avast &&  profileStore.avast } /> */}
+                        <img src={avaShow } />
+
+                
+                       
+                        {/* <img src='/media/avatars/ava.jpg'  /> */}
 
 
                         <form onSubmit={uploadPhoto}>
-                            <input onChange={(evt) => setCover(evt.target.files[0])} type="file" id="myFile" name="filename" />
+                           
+
+                            <input onChange={(e) => setAvatar(e.target.files[0])} type="file"  name="file" />
                             
                             <button className={s.btn}>загрузить фото </button>
                         </form>

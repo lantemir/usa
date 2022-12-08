@@ -56,6 +56,14 @@ class MyPost(models.Model):
 
 
 
+
+# для картинок
+# def upload_to_avatar (instance, filename):
+#     return 'avatars/{filename}'.format(filename=filename)
+
+def upload_to_avatar (instance, filename):
+    return '/'.join(['avatars', filename])
+
 class Profile(models.Model):
     user = models.OneToOneField(
         primary_key=True,
@@ -72,9 +80,9 @@ class Profile(models.Model):
     avatar = models.ImageField(
         null=True,       
         blank=True,       
-        upload_to="avatars/",
+        upload_to=upload_to_avatar,
         default='avatars/ava.jpg'
-    )
+    )    
 
     class Meta:
         app_label = 'auth'
@@ -94,3 +102,74 @@ def create_profile(sender, instance, created, **kwargs):
         Profile.objects.get_or_create(user=instance)
     else:
         Profile.objects.get_or_create(user=instance)
+
+
+class youtube_video_category(models.Model): 
+    title = models.CharField(
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        
+        #default="Заголовок категории истории",
+        verbose_name="Заголовок категории видео",
+        help_text='<small class="text-muted">это наш заголовок категории видео</small><hr><br>',
+        max_length=250,
+    )
+
+    class Meta:
+        app_label = 'django_app' # для отображения в админке и ещё надо изменить и добавить в apps.py
+        # ordering = ('title') # сортировка сначала по title потом по dexcription
+        verbose_name = 'Категории видео'    
+        verbose_name_plural = 'Категории видео'
+
+    def __str__(self) -> str:
+        return f'{self.title}'
+
+class youtube_video(models.Model):
+    creator = models.ForeignKey(
+        null=True,
+        blank=True,
+        to=User, 
+        on_delete=models.SET_NULL)
+
+    title = models.CharField(
+        max_length=256,
+        unique=False,
+        editable=True,
+        blank=True, #можно оставить пустым      
+    )    
+
+    description = models.TextField(        
+        unique=False,
+        editable=True,
+        blank=True, #можно оставить пустым       
+        default="Описание",
+        verbose_name="Описание",        
+    )
+
+    category_id = models.ManyToManyField(
+        blank=True,  
+        verbose_name="Категория видео",
+        to=youtube_video_category,
+    )
+
+    url_from_youtube = models.TextField(
+        unique=False,
+        editable=True,
+        blank=True, #можно оставить пустым 
+    )
+
+    datetime_field = models.DateTimeField(       
+        auto_now_add=True,
+        blank=True,
+    )
+
+    class Meta:
+        app_label = 'django_app' # для отображения в админке и ещё надо изменить и добавить в apps.py
+        # ordering = ('title') # сортировка сначала по title потом по dexcription
+        verbose_name = 'видео с ютуба'    
+        verbose_name_plural = 'Ютуб видео'
+
+    def __str__(self) -> str:
+        return f'{self.title}'

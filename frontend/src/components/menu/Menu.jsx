@@ -38,7 +38,7 @@ const exit = () => {
         
         <div className={`${s.singleCol} ${s.socialMediaIconsWhite}`}>      
             
-            <div><NavLink to="/"> <FontAwesomeIcon icon={faBars} /> <span className={s.spanList}>Меню</span> </NavLink>   </div>
+           <NavLink to="/"> <FontAwesomeIcon icon={faBars} /> <span className={s.spanList}>Главная</span> </NavLink>   
             
         </div>
 

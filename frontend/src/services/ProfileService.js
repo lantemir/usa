@@ -13,10 +13,17 @@ export default class ProfileService {
         return resp
     }
 
+    // static async uploadPhotoProfile(uploadData){
+    //     const resp = await $api.post('/api/profilephoto/', uploadData)
+    //     return resp
+    // }
+
+
     static async uploadPhotoProfile(uploadData){
-        const resp = $api.post('/api/profile/', {
-            cover: uploadData
-        })
+        const resp = await $api.post('/api/profilephoto/',  uploadData)
+        return resp
     }
+
+    
 }
 

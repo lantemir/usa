@@ -4,8 +4,12 @@ from django.contrib.auth.models import User
 #
 
 class ProfileModelSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source = 'user.username')
+    user_id = serializers.ReadOnlyField(source = 'user.id')
+    avatar = serializers.ImageField(required=False)
     class Meta:
         model = models.Profile
+        # fields = ['id', 'user', 'user_id', 'avatar']
         fields = "__all__"
 
 
@@ -24,7 +28,19 @@ class UserModelSerializer(serializers.ModelSerializer):
 
         return ProfileModelSerializer(instance=obj_list, many=True).data
 
+class VideoModelSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = models.youtube_video
+        fields = "__all__"
+
+
+class VideoCategoryModelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.youtube_video_category
+        fields = "__all__"
+        
 
 
 # картинка тест

@@ -4,11 +4,50 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faYoutube } from '@fortawesome/free-brands-svg-icons'
 import { faSortDown } from '@fortawesome/free-solid-svg-icons'
 
+import { requestVideos, requestCurrentCategory } from '../../redux/video-reducer';
 
 import Menu from '../menu/Menu';
+import { useEffect } from 'react';
 
+import { useDispatch, useSelector } from 'react-redux';
+import Paginator from '../Paginator/Paginator'
 
 const Video = () => {
+
+    const dispatch = useDispatch();
+
+    const videoStore = useSelector(state => state.videoReducerR);
+
+    const{
+        videos,
+        pageSize,
+        totalVideoCount,
+        currentPage,
+        isFetching,
+        followingInProgress,
+        category,
+        currentCategory
+    } = videoStore
+    
+    
+    useEffect( () =>{
+        requestVideos(1, dispatch, pageSize, 0)
+
+    },[])
+
+    useEffect( () =>{
+        requestVideos(1, dispatch, pageSize, currentCategory)
+
+    },[currentCategory])
+
+    const onPageChanged = (currentPage) => {
+        requestVideos(currentPage, dispatch, pageSize, currentCategory)    
+      }
+
+    const testState = () => {
+        console.log(videoStore)
+    }
+
     return (
         <div className={s.wrapper}>
 
@@ -23,10 +62,13 @@ const Video = () => {
 
                 <div className={s.topListCategory}>
                     <ul>
-                        <li><FontAwesomeIcon icon={faSortDown} /> фильмы</li>
-                        <li><FontAwesomeIcon icon={faSortDown}/> грамматика</li>
-                        <li> <FontAwesomeIcon icon={faSortDown}/>мультики</li>
-                        <li> <FontAwesomeIcon icon={faSortDown}/>иное</li>
+                        <li onClick={() => requestCurrentCategory(0, dispatch)}><FontAwesomeIcon icon={faSortDown} /> все категории</li>
+                        {category && category.map(item => {
+                            return(
+                                <li onClick={() => requestCurrentCategory(item.id, dispatch)} key={item.id}><FontAwesomeIcon icon={faSortDown} /> {item.title}</li>
+                            )
+                        }) }
+                       
                     </ul>
 
                 </div>
@@ -34,50 +76,30 @@ const Video = () => {
                   
              
 
+                <div className={s.videoBlockMain}>
+
+                    {videos && videos.map(item => {
+                        return(
+                            <div key={item.id} className={s.videoBlock}>
+                                <iframe width="100%" height="200px" src={"https://www.youtube.com/embed/"+item.url_from_youtube} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                                <p> {item.title}</p>
+                            </div>
+                        )
+                    })}
+
+                   
+
+
+             
+
+                </div>   
+
+                {/* <button onClick={testState}>test state</button>  */}
+
+                <div className={s.paginator}>
                 
-
-                <div className={s.videoBlock}>
-                    <iframe width="100%" height="200px" src="https://www.youtube.com/embed/JPJjwHAIny4" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                    <p> описание видео</p>
-                </div>
-
-                <div className={s.videoBlock}>
-                    <iframe width="100%" height="200px" src="https://www.youtube.com/embed/JPJjwHAIny4" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                    <p> описание видео</p>
-                </div>
-
-                <div className={s.videoBlock}>
-                    <iframe width="100%" height="200px" src="https://www.youtube.com/embed/JPJjwHAIny4" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                    <p> описание видео</p>
-                </div>
-
-                <div className={s.videoBlock}>
-                    <iframe width="100%" height="200px" src="https://www.youtube.com/embed/JPJjwHAIny4" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                    <p> описание видео</p>
-                </div>
-
-
-                <div className={s.videoBlock}>
-                    <iframe width="100%" height="200px" src="https://www.youtube.com/embed/JPJjwHAIny4" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                    <p> описание видео</p>
-                </div>
-
-                <div className={s.videoBlock}>
-                    <iframe width="100%" height="200px" src="https://www.youtube.com/embed/JPJjwHAIny4" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                    <p> описание видео</p>
-                </div>
-
-                <div className={s.videoBlock}>
-                    <iframe width="100%" height="200px" src="https://www.youtube.com/embed/JPJjwHAIny4" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                    <p> описание видео</p>
-                </div>
-
-                <div className={s.videoBlock}>
-                    <iframe width="100%" height="200px" src="https://www.youtube.com/embed/JPJjwHAIny4" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                    <p> описание видео</p>
-                </div>
-
-                
+                     <Paginator currentPage={currentPage} totalUsersCount={totalVideoCount} pageSize={pageSize} onPageChanged={onPageChanged}/>
+                </div>           
 
             </div>
         </div>

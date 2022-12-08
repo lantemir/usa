@@ -20,11 +20,16 @@ urlpatterns = [
 
     path('users/', views.users, name='users'),
 
+    path('video/', views.videos, name='videos'),
+    
     # re_path(route=r'^users/(?P<user_id>\d+)/$', view=views.users, ),
     
 
-    path('profilephoto/', views.MyPostViewSet.as_view()),
+    path('profilephoto/', views.MyProfilePhoto.as_view()),
+    path('mypost/', views.MyPostViewSet.as_view()),
 
     path('parsingexchange/', views.parsing_exchange, name='parsing_exchange'),
     
 ]
+
+
