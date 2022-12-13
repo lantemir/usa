@@ -28,6 +28,9 @@ const Home = () => {
       navigate("/login");
     }
   }, []);
+
+
+
   
   // if (!store.isAuth) {
 

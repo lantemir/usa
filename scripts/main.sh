@@ -132,26 +132,29 @@ sudo systemctl restart gunicorn
 # sudo systemctl stop gunicorn
 
 
-
+              #ip77.240.38.106
 
 # sudo nano /etc/nginx/sites-available/192.168.1.83-http.conf 
-sudo nano /etc/nginx/sites-available/185.116.193.191-http.conf 
+sudo nano /etc/nginx/sites-available/ilusa.kz
 <file>
 server {
 listen 80;
 listen [::]:80;
 
 #server_name localhost 127.0.0.1 192.168.1.83;  
-server_name localhost 127.0.0.1 185.116.193.191;  
+server_name localhost 127.0.0.1 ilusa.kz;  
 
 
 #root /home/ubuntu/projects/mytodolist;
-root /root/web;
+root /home/ubuntu/web;
+
+# index index.html;
+
 location /.well-known/acme-challenge/ {}
 
 location /favicon.ico {
     #alias /home/ubuntu/projects/mytodolist/static/logo.png;
-    alias /root/web/static/logo.png;
+    alias /home/ubuntu/web/static/logo.png;
 
     access_log off; log_not_found off;
 
@@ -160,7 +163,7 @@ location /favicon.ico {
 
 location /robots.txt {
     #alias /home/ubuntu/projects/mytodolist/static/robots.txt;
-    alias /root/web/static/robots.txt;
+    alias /home/ubuntu/web/static/robots.txt;
 
     access_log off; log_not_found off;
 
@@ -169,14 +172,14 @@ location /robots.txt {
 
 location /static/ {
     #alias /home/ubuntu/projects/mytodolist/static/;
-    alias /root/web/static/;
+    alias /home/ubuntu/web/static/;
 
     expires max;
 }
 
 location /media/ {
     #alias /home/ubuntu/projects/mytodolist/static/media/;
-    alias /root/web/static/media/;
+    alias /home/ubuntu/web/static/media/;
 
     expires max;
 }
@@ -194,7 +197,7 @@ location / {
 </file>
 
 # sudo ln -s /etc/nginx/sites-available/192.168.1.83-http.conf /etc/nginx/sites-enabled/192.168.1.83-http.conf
-sudo ln -s /etc/nginx/sites-available/185.116.193.191-http.conf /etc/nginx/sites-enabled/185.116.193.191-http.conf
+sudo ln -s /etc/nginx/sites-available/ilusa.kz /etc/nginx/sites-enabled/ilusa.kz
 sudo service nginx start
 # sudo systemctl status nginx.service
 # sudo ufw allow 443

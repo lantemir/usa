@@ -41,10 +41,12 @@ const App = () => {
     if(localStorage.getItem('token')){
       // store.checkAuth()
       console.log("useEffectAPP");
-      checkAuth(dispatch)
-
-      
+      checkAuth(dispatch)      
     }    
+
+    
+
+
   },[store.isAuth])
 
   
