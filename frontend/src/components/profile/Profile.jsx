@@ -155,7 +155,7 @@ const Profile = () => {
                         
                     </div>
 
-                    <button onClick={getUseSelector}>useSelector</button>
+                    {/* <button onClick={getUseSelector}>useSelector</button> */}
 
                 </div>
 

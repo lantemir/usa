@@ -12,7 +12,7 @@ let initialState = {
     currentPage: 1,
 };
 
-const postReducer = (state = initialState, action) => {
+const postsReducer = (state = initialState, action) => {
 
     switch (action.type){
         case SET_POSTS:{
@@ -50,4 +50,4 @@ export const requestPosts = async (currentPage, dispatch, pageSize, postid) => {
     dispatch(setPosts(response.data.posts))
 }
 
-export default postReducer
+export default postsReducer

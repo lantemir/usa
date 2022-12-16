@@ -15,6 +15,7 @@ import React, { useEffect } from 'react';
 
 import { checkAuth, logout } from './redux/auth-reducer';
 import Posts from './components/posts/posts';
+import Post from './components/post/post';
 
 
 
@@ -59,8 +60,8 @@ const App = () => {
 
     <div className='app-wrapper'>    
       
-      <h3>{store.isAuth ? `Пользователь авторизован проверка: ${store.isAuth
-      } `: 'АВТОРИЗУЙТЕСЬ'} </h3>
+      {/* <h3>{store.isAuth ? `Пользователь авторизован проверка: ${store.isAuth
+      } `: 'АВТОРИЗУЙТЕСЬ'} </h3> */}
 
       
 
@@ -79,6 +80,7 @@ const App = () => {
           <Route path='/users' element={<Users/>} ></Route>    
           <Route path='/exchange' element={<Exchange/>}> </Route>
           
+          <Route path='/post/:id' element={<Post/>}></Route>
           <Route path='/posts' element={<Posts/>}></Route>  
         </Routes>     
       </BrowserRouter>

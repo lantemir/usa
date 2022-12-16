@@ -7,6 +7,12 @@ export default class PostService{
         return resp
     }
 
+    static async getPost(postid){
+        const resp = $api.get('/api/mypost/', {
+            params: {postid: postid}})
+        return resp
+    }
+
     // static async getCategoryVideos() {
     //     const resp = $api.get('/api/videocategory/')
     //     return resp 

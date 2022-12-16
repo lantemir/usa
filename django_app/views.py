@@ -369,11 +369,18 @@ class MyPostViewSet(APIView):
         print(request.query_params.get("postid"))
 
         postid = int(request.query_params.get("postid"))
-        pagesize = int(request.query_params.get("pageSize"))
-        currentpage = int(request.query_params.get("currentPage"))
+        if request.query_params.get("pageSize"):
+            pagesize = int(request.query_params.get("pageSize"))
+        if request.query_params.get("currentPage"):
+            currentpage = int(request.query_params.get("currentPage"))
 
         if(postid > 0):
             print(postid)
+            obj_post = models.MyPost.objects.get(pk = postid )
+            serialized_obj_post = serializers.MyPostSerializer(instance=obj_post, many=False).data
+
+
+            return Response( {"post": serialized_obj_post,}, status=status.HTTP_200_OK)
 
         obj_posts = models.MyPost.objects.all()
         serialized_obj_posts = serializers.MyPostSerializer(instance=obj_posts, many=True).data

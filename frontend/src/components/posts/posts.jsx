@@ -12,11 +12,12 @@ import { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import Paginator from '../Paginator/Paginator'
+import { Link } from 'react-router-dom';
 
 const Posts = () => {
     const dispatch = useDispatch();
 
-    const postStore = useSelector(state => state.postReducerR);
+    const postStore = useSelector(state => state.postsReducerR);
 
     const{
         posts,
@@ -67,9 +68,14 @@ const Posts = () => {
 
                     {posts && posts.map(item => {
                         return (
+
+                            
                             <div key={item.id} className={s.videoBlock}>  
+                            <Link to={`/post/${item.id}`}>
                                 <img src={item.image_url} />                              
                                 <p> {item.title}</p>
+                            </Link>
+                                
                             </div>
                         )
                     })}

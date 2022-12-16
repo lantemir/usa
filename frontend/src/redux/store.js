@@ -6,7 +6,8 @@ import authReducer from './auth-reducer';
 import profileReducer from './profile-reducer';
 import userReducer from './user-reducer';
 import videoReducer from './video-reducer';
-import postReducer from './posts-reducer';
+import postsReducer from './posts-reducer';
+import postReducer from './post-reducer'
 
 
 
@@ -15,7 +16,8 @@ let reducers = combineReducers({
     profileReducerR: profileReducer,
     userReducerR: userReducer,
     videoReducerR: videoReducer,
-    postReducerR: postReducer    
+    postsReducerR: postsReducer,
+    postReducerR: postReducer  
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; 

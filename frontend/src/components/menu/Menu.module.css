@@ -28,6 +28,7 @@
 
 .menuMain{
     display: flex;
+    min-width: 150px;
     flex-direction: column;
     height: 100vh;
 }

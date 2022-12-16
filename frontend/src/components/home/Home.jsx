@@ -71,7 +71,7 @@ const Home = () => {
       <div className={s.mainBlock}>
 
         <h1>Главная страница!</h1>
-        <button onClick={showState}>проверка стате</button>
+        {/* <button onClick={showState}>проверка стате</button> */}
       </div>        
     </div>
   )
