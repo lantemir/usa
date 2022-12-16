@@ -7,6 +7,7 @@
 
 .mainBlock{ 
  width: 100%;
+ 
 }
     
 
@@ -18,7 +19,7 @@
 }
 .videoBlockMain{
     margin-top: 2%;
-    /* border: 10px solid red; */
+   
     display: flex;
 
     flex-wrap: wrap;
@@ -27,18 +28,20 @@
 
 .videoBlock{
     width: 30%;
+    border: 1px solid rgb(168, 161, 161);
     border-radius: 15px;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     margin-bottom: 20px;
+  
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     
+}
+.videoBlock img{
+    width: 100%;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;    
 }
 .videoBlock p{
     padding: 15px;
-    
-}
-.videoBlock iframe{
-    border-top-left-radius:  15px;
-    border-top-right-radius:  15px;
 }
 
 .topListCategory{

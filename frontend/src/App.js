@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import React, { useEffect } from 'react';
 
 import { checkAuth, logout } from './redux/auth-reducer';
+import Posts from './components/posts/posts';
 
 
 
@@ -78,7 +79,7 @@ const App = () => {
           <Route path='/users' element={<Users/>} ></Route>    
           <Route path='/exchange' element={<Exchange/>}> </Route>
           
-            
+          <Route path='/posts' element={<Posts/>}></Route>  
         </Routes>     
       </BrowserRouter>
 
@@ -86,7 +87,7 @@ const App = () => {
 
     </div>
   
-  );
+  )
 }
 
 export default App;

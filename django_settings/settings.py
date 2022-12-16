@@ -47,6 +47,10 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 
+LOGOUT_REDIRECT_URL = '/api/frontpage/'
+LOGIN_REDIRECT_URL = '/rooms/'
+LOGIN_URL = '/api/login/'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -59,8 +63,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'channels',
 
     'django_app',
+    'room',
+
     'corsheaders',
 
     'rest_framework',
@@ -100,6 +107,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'django_settings.wsgi.application'
+ASGI_APPLICATION = 'django_settings.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 
 # Database

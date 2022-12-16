@@ -5,10 +5,19 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from django_app.views import MyPostViewSet#для класов
+from django.contrib.auth import views as auth_views
 #
 
+from django.shortcuts import redirect
 urlpatterns = [
     path('', views.index, name="index"),
+
+    path('frontpage/',views.frontpage, name='frontpage'),
+    path('signup/', views.signup, name='signup'),
+    path('login/', auth_views.LoginView.as_view(template_name='django_app/login.html'), name='login'),
+    
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
 
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
@@ -26,9 +35,13 @@ urlpatterns = [
     
 
     path('profilephoto/', views.MyProfilePhoto.as_view()),
+
+   
     path('mypost/', views.MyPostViewSet.as_view()),
 
     path('parsingexchange/', views.parsing_exchange, name='parsing_exchange'),
+
+    re_path(r'^.*$', lambda request: redirect('/', permanent=False), name='redirect'),
     
 ]
 

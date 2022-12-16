@@ -14,7 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.shortcuts import redirect
+from django.urls import path, include, re_path
 from django_app import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -26,11 +27,13 @@ urlpatterns = [
 
     path('', views.index, name=''),
 
-    
-
+   
+    path('rooms/', include('room.urls')),
     path('api/', include('django_app.urls')),
 
     path('api/', include('rest_framework.urls')),
+
+    # re_path(r'^.*$', lambda request: redirect('/', permanent=False), name='redirect'),
 
     # path('parsingexchange/', views.parsing_exchange, name='parsing_exchange'),
 ]

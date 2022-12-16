@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import re
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes 
@@ -19,7 +19,10 @@ import requests
 from bs4 import BeautifulSoup
 # доступ к файлам
 from django.core.files.storage import FileSystemStorage
-#
+#чат
+from django.contrib.auth import login
+from .forms import SignUpForm
+
 
 def index(request):
     context={}
@@ -27,6 +30,25 @@ def index(request):
     print("index")
     return render(request=request, template_name = 'build/index.html', context=context, status=status.HTTP_200_OK)
 
+
+# @api_view(http_method_names=["POST", "GET", "PUT"])
+# @permission_classes([AllowAny])
+def frontpage(request):
+    print('frontpage')
+    return render(request, 'django_app/frontpage.html')
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+
+        if form.is_valid():
+            user =form.save()
+            login(request, user)
+
+            return redirect('frontpage')
+    else:
+        form = SignUpForm()
+    return render(request, 'django_app/signup.html', {'form': form})
 
 
 @api_view(http_method_names=["POST", "GET", "PUT"])
@@ -307,6 +329,8 @@ class MyProfilePhoto(APIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]   
 
+   
+
     def post(self, request, *args, **kwargs):
         usern=request.user  
 
@@ -339,6 +363,40 @@ class MyPostViewSet(APIView):
     serializer_class = MyPostSerializer
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]   
+
+    def get(self, request, *args, **kwargs):
+
+        print(request.query_params.get("postid"))
+
+        postid = int(request.query_params.get("postid"))
+        pagesize = int(request.query_params.get("pageSize"))
+        currentpage = int(request.query_params.get("currentPage"))
+
+        if(postid > 0):
+            print(postid)
+
+        obj_posts = models.MyPost.objects.all()
+        serialized_obj_posts = serializers.MyPostSerializer(instance=obj_posts, many=True).data
+
+        paginator_obj = Paginator(serialized_obj_posts, pagesize)
+
+        currentPage = paginator_obj.get_page(currentpage).object_list
+
+       
+        
+
+
+
+        return Response( {"posts": currentPage, "conterPosts": obj_posts.count()}, status=status.HTTP_200_OK)
+            
+
+        
+
+        
+        # print(request.data['postid'])
+        # postid = request.data['postid']
+
+        return Response( {"posts": {"postid": postid}},  status=status.HTTP_200_OK)
     
     def post(self, request, *args, **kwargs):
         usern=request.user        
